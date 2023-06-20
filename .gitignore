@@ -1,3 +1,6 @@
+.DS_Store
+.idea
+
 # Cache and logs (Symfony2)
 /app/cache/*
 /app/logs/*
@@ -62,6 +65,3 @@
 ###< symfony/phpunit-bridge ###
 
 .env.local
-
-/var/cache/
-/var/log/
