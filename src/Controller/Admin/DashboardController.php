@@ -32,12 +32,16 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         return [
-            MenuItem::subMenu('Users', 'fa fa-article')->setSubItems([
+            MenuItem::subMenu('Users', 'fas fa-user')->setSubItems([
                 MenuItem::linkToCrud('Users list', 'fas fa-list', User::class),
 
                 MenuItem::linkToCrud('Add User', 'fas fa-plus', User::class)
                     ->setAction(Action::NEW),
             ]),
+
+            MenuItem::section(),
+
+            MenuItem::linkToRoute('Go to chat', 'fas fa-comment', 'home'),
         ];
     }
 }
