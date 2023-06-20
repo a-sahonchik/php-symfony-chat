@@ -15,7 +15,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    private ?int $id = null;
+    private ?string $id = null;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     private ?string $username = null;
@@ -29,7 +29,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private string $password;
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
