@@ -18,8 +18,9 @@ class ChatMessage
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $text = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private ?string $authorName = null;
+    #[ORM\ManyToOne()]
+    #[ORM\JoinColumn(onDelete: "SET NULL")]
+    private ?User $author = null;
 
     public function getId(): ?string
     {
@@ -38,14 +39,14 @@ class ChatMessage
         return $this;
     }
 
-    public function getAuthorName(): ?string
+    public function getAuthor(): ?User
     {
-        return $this->authorName;
+        return $this->author;
     }
 
-    public function setAuthorName(string $authorName): static
+    public function setAuthor(?User $author): static
     {
-        $this->authorName = $authorName;
+        $this->author = $author;
 
         return $this;
     }

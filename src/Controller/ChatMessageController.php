@@ -45,7 +45,7 @@ class ChatMessageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $chatMessage = $form->getData();
             $user = $this->getUser();
-            $chatMessage->setAuthorName($user->getUsername());
+            $chatMessage->setAuthor($user);
             $this->entityManager->persist($chatMessage);
             $this->entityManager->flush();
 

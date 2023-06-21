@@ -7,6 +7,7 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -33,7 +34,9 @@ class UserCrudController extends AbstractCrudController
                     'mapped' => false,
                     'first_options' => ['hash_property_path' => 'password', 'label' => 'New password'],
                     'second_options' => ['label' => 'Repeat password'],
-                ]),
+                ])
+                ->onlyWhenCreating(),
+            BooleanField::new('isBlocked'),
             ChoiceField::new('roles')->setChoices(
                 [
                     'User' => 'ROLE_USER',
