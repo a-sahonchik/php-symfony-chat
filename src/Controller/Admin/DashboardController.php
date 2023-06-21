@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use App\Entity\ChatMessage;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -40,6 +41,10 @@ class DashboardController extends AbstractDashboardController
                 MenuItem::linkToCrud('Add User', 'fas fa-plus', User::class)
                     ->setAction(Action::NEW),
             ]),
+
+            MenuItem::section(),
+
+            MenuItem::linkToCrud('Messages list', 'fas fa-list', ChatMessage::class),
 
             MenuItem::section(),
 
