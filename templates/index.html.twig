@@ -1,10 +1,51 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Users</h1>
-    <div id="users" class="mb-5">
-        {% for user in users %}
-            <p>{{ user.username }}</p>
+    <h1>Chat</h1>
+    <div id="chat-messages" class="mb-5">
+        {% for chatMessage in chatMessages %}
+            <div
+                {% if app.user and app.user.username == chatMessage.authorName %}
+                    class="d-flex justify-content-end"
+                {% else %}
+                    class="d-flex"
+                {% endif %}
+            >
+                {% if is_granted('ROLE_MODERATOR') or is_granted('ROLE_ADMIN') %}
+                    <div class="chat-block">
+                        {{ include('chatMessage/delete.html.twig') }}
+                    </div>
+                {% endif %}
+
+                {% if is_granted('ROLE_USER') and app.user.username == chatMessage.authorName %}
+                    <div class="chat-block">
+                        <button onclick="toggleForm('{{ chatMessage.id }}')"
+                                style="background: white;border: none;color: red;">
+                            <i class="fas fa-pencil"></i>
+                        </button>
+                    </div>
+                {% endif %}
+
+                <div
+                    {% if app.user and app.user.username == chatMessage.authorName %}
+                        class="chat-block my-chat-message"
+                    {% else %}
+                        class="chat-block chat-message"
+                    {% endif %}
+                >
+                <div class="chat-author-username">{{ chatMessage.authorName }}</div>
+                <div name="{{ chatMessage.id }}">{{ chatMessage.text }}</div>
+                {% if is_granted('ROLE_USER') and app.user.username == chatMessage.authorName %}
+                    <div id="{{ chatMessage.id }}" style="display: none">
+                        {{ render(path('message_edit', { 'id': chatMessage.id })) }}
+                    </div>
+                {% endif %}
+                </div>
+            </div>
         {% endfor %}
     </div>
+
+    {% if is_granted('ROLE_USER') %}
+        {{ render(path('message_new')) }}
+    {% endif %}
 {% endblock %}

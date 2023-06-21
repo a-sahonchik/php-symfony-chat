@@ -44,3 +44,31 @@
 .form-group {
   margin-bottom: 1rem;
 }
+
+div.chat-message {
+  background-color: #deefff;
+  padding: 1em;
+}
+
+div.my-chat-message {
+  background-color: #8ab5dd;
+  padding: 1em;
+}
+
+.d-flex {
+  padding-bottom: 1em;
+}
+
+.chat-author-username {
+  font-weight: bold;
+  padding-bottom: 0.5em;
+}
+
+.chat-block {
+  padding: 0.5rem;
+  border-radius: 15px;
+}
+
+.new-message-form > div > div:nth-child(1) {
+  width: 95%;
+}

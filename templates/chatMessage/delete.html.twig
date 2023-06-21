@@ -1,0 +1,7 @@
+<form method="post" action="{{ path('message_delete', {'id': chatMessage.id}) }}" onsubmit="return confirm('Delete?');">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ chatMessage.id) }}">
+    <button style="background: white;border: none;color: red;">
+        <i class="fas fa-xmark"></i>
+    </button>
+</form>

@@ -1,0 +1,8 @@
+{{ form_start(form, {method: 'POST', action: path('message_new'), attr: { class: 'new-message-form' }})}}
+    <div class="input-group mb-3">
+        {{ form_row(form.text, { 'attr': { 'class': 'form-control' } }) }}
+        <div class="input-group-append">
+            <button class="btn"><i class="fa fa-paper-plane"></i></button>
+        </div>
+    </div>
+{{ form_end(form) }}

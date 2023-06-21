@@ -1,0 +1,14 @@
+{{ form_start(edit_form, {
+    method: 'PUT',
+    action: path('message_edit', { 'id': chatMessage.id }),
+    attr: { class: "form-inline" }
+}) }}
+
+    <div class="input-group mb-3">
+        {{ form_row(edit_form.text, { 'attr': { 'class': 'form-control' } }) }}
+        <div class="input-group-append">
+            <button class="btn"><i class="fa fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+{{ form_end(edit_form) }}

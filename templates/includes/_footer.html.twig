@@ -1,3 +1,20 @@
+<script>
+  function toggleForm(id) {
+    const form = document.getElementById(id);
+
+    const chatMessage = document.getElementsByName(id)[0];
+    if (form.style.display === "none") {
+
+      form.style.display = "block";
+      chatMessage.style.display="none";
+    } else {
+      form.style.display = "none";
+      chatMessage.style.display="block";
+    }
+  }
+
+</script>
+
 <div id="footer" class="navbar-dark bg-dark text-center">
   <span class="navbar-text">This app was made with Symfony in 2023</span>
 </div>
