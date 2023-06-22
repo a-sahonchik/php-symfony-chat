@@ -11,7 +11,7 @@
                     class="d-flex"
                 {% endif %}
             >
-                {% if is_granted('ROLE_MODERATOR') or is_granted('ROLE_ADMIN') %}
+                {% if is_granted('ROLE_MODERATOR') or is_granted('ROLE_ADMIN') or (app.user and chatMessage.author and chatMessage.author == app.user)%}
                     <div class="chat-block">
                         {{ include('chatMessage/delete.html.twig') }}
                     </div>

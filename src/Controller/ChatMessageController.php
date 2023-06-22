@@ -117,8 +117,12 @@ class ChatMessageController extends AbstractController
     public function delete(Request $request, ChatMessage $chatMessage): Response
     {
         if ($this->isCsrfTokenValid('delete' . $chatMessage->getId(), $request->request->get('_token'))) {
-            $this->chatMessageRepository->remove($chatMessage);
-            $this->entityManager->flush();
+            $user = $this->getUser();
+
+            if ($user->isAdmin() || $user->isModerator() || $chatMessage->getAuthor() === $user) {
+                $this->chatMessageRepository->remove($chatMessage);
+                $this->entityManager->flush();
+            }
         }
 
         return $this->redirectToRoute('home');

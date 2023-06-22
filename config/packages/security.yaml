@@ -32,7 +32,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-         - { route: message_delete, roles: [ROLE_MODERATOR, ROLE_ADMIN] }
+         - { route: message_delete, roles: [ROLE_USER, ROLE_MODERATOR, ROLE_ADMIN] }
          - { route: user_block, roles: [ROLE_MODERATOR, ROLE_ADMIN] }
          - { path: /admin, roles: ROLE_ADMIN }
 
