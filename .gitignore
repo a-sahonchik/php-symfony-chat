@@ -76,3 +76,6 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 /public/uploads/
+
+.php-cs-fixer.cache
+/tools/php-cs-fixer/vendor/

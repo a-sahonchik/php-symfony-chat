@@ -5,27 +5,27 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\ChatMessage;
+use App\Form\ChatMessageFormHandler;
 use App\Form\ChatMessageFormType;
 use App\Repository\ChatMessageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ChatMessageController extends AbstractController
 {
     public function __construct(
         private ChatMessageRepository $chatMessageRepository,
         private EntityManagerInterface $entityManager,
+        private ChatMessageFormHandler $chatMessageFormHandler,
     ) {
     }
 
     #[Route('/', name: 'home')]
-    public function index(Request $request): Response
+    public function index(): Response
     {
         $chatMessages = $this->chatMessageRepository->findAll();
 
@@ -36,7 +36,7 @@ class ChatMessageController extends AbstractController
 
     #[Route('/message/new', name: 'message_new')]
     #[IsGranted('ROLE_USER')]
-    public function new(Request $request, SluggerInterface $slugger): Response
+    public function new(Request $request): Response
     {
         $chatMessage = new ChatMessage();
 
@@ -46,37 +46,15 @@ class ChatMessageController extends AbstractController
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-                $chatMessage = $form->getData();
+                try {
+                    $chatMessage = $this->chatMessageFormHandler->handleNewChatMessageForm($form);
+                } catch (\Exception $e) {
+                    $this->addFlash('error', $e->getMessage());
 
-                $user = $this->getUser();
-                $chatMessage->setAuthor($user);
-
-                $imageFile = $form->get('image')->getData();
-
-                if ($chatMessage->getText() === null && $imageFile === null) {
                     return $this->redirectToRoute('home');
                 }
 
-                if ($imageFile) {
-                    $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    $safeFilename = $slugger->slug($originalFilename);
-                    $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
-
-                    try {
-                        $imageFile->move(
-                            $this->getParameter('chat_image_directory'),
-                            $newFilename
-                        );
-                    } catch (FileException $e) {
-                        $this->addFlash('error', $e->getMessage());
-
-                        return $this->redirectToRoute('home');
-                    }
-
-                    $chatMessage->setImageFileName($newFilename);
-                }
-                $this->entityManager->persist($chatMessage);
-                $this->entityManager->flush();
+                $this->chatMessageRepository->save($chatMessage, true);
             } else {
                 foreach ($form->getErrors(true) as $error) {
                     $this->addFlash('error', $error->getMessage());
@@ -106,9 +84,6 @@ class ChatMessageController extends AbstractController
                 }
 
                 $this->entityManager->flush();
-
-                $this->addFlash('success', 'article.action.edit.success');
-
             }
 
             return $this->redirectToRoute('home');
@@ -127,8 +102,7 @@ class ChatMessageController extends AbstractController
             $user = $this->getUser();
 
             if ($user->isAdmin() || $user->isModerator() || $chatMessage->getAuthor() === $user) {
-                $this->chatMessageRepository->remove($chatMessage);
-                $this->entityManager->flush();
+                $this->chatMessageRepository->remove($chatMessage, true);
             }
         }
 
