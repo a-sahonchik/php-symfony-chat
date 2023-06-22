@@ -9,10 +9,12 @@ use App\Form\ChatMessageFormType;
 use App\Repository\ChatMessageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ChatMessageController extends AbstractController
 {
@@ -34,7 +36,7 @@ class ChatMessageController extends AbstractController
 
     #[Route('/message/new', name: 'message_new')]
     #[IsGranted('ROLE_USER')]
-    public function new(Request $request): Response
+    public function new(Request $request, SluggerInterface $slugger): Response
     {
         $chatMessage = new ChatMessage();
 
@@ -42,12 +44,44 @@ class ChatMessageController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $chatMessage = $form->getData();
-            $user = $this->getUser();
-            $chatMessage->setAuthor($user);
-            $this->entityManager->persist($chatMessage);
-            $this->entityManager->flush();
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $chatMessage = $form->getData();
+
+                $user = $this->getUser();
+                $chatMessage->setAuthor($user);
+
+                $imageFile = $form->get('image')->getData();
+
+                if ($chatMessage->getText() === null && $imageFile === null) {
+                    return $this->redirectToRoute('home');
+                }
+
+                if ($imageFile) {
+                    $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+                    try {
+                        $imageFile->move(
+                            $this->getParameter('chat_image_directory'),
+                            $newFilename
+                        );
+                    } catch (FileException $e) {
+                        $this->addFlash('error', $e->getMessage());
+
+                        return $this->redirectToRoute('home');
+                    }
+
+                    $chatMessage->setImageFileName($newFilename);
+                }
+                $this->entityManager->persist($chatMessage);
+                $this->entityManager->flush();
+            } else {
+                foreach ($form->getErrors(true) as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+            }
 
             return $this->redirectToRoute('home');
         }

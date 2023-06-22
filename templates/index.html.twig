@@ -49,7 +49,16 @@
                         <div class="chat-author-username">[DELETED USER]</div>
                     {% endif %}
 
-                    <div name="{{ chatMessage.id }}">{{ chatMessage.text }}</div>
+                    {% if chatMessage.imageFileName %}
+                        <div class="chat-message-image-container">
+                            <img class="chat-message-image" src="{{ asset('uploads/chat_images/' ~ chatMessage.imageFileName) }}" alt="{{ chatMessage.imageFileName }}">
+                        </div>
+                    {% endif %}
+
+                    {% if chatMessage.text %}
+                        <div name="{{ chatMessage.id }}">{{ chatMessage.text }}</div>
+                    {% endif %}
+
                     {% if is_granted('ROLE_USER') and chatMessage.author and app.user.username == chatMessage.author.username %}
                         <div id="{{ chatMessage.id }}" style="display: none">
                             {{ render(path('message_edit', { 'id': chatMessage.id })) }}

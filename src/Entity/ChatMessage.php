@@ -15,12 +15,15 @@ class ChatMessage
     #[ORM\Column(type: 'uuid', unique: true)]
     private ?string $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $text = null;
 
     #[ORM\ManyToOne()]
     #[ORM\JoinColumn(onDelete: "SET NULL")]
     private ?User $author = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $imageFileName = null;
 
     public function getId(): ?string
     {
@@ -47,6 +50,18 @@ class ChatMessage
     public function setAuthor(?User $author): static
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getImageFileName(): ?string
+    {
+        return $this->imageFileName;
+    }
+
+    public function setImageFileName(?string $imageFileName): static
+    {
+        $this->imageFileName = $imageFileName;
 
         return $this;
     }

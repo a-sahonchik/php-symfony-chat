@@ -48,11 +48,13 @@
 div.chat-message {
   background-color: #deefff;
   padding: 1em;
+  max-width: 50%;
 }
 
 div.my-chat-message {
   background-color: #8ab5dd;
   padding: 1em;
+  max-width: 50%;
 }
 
 .d-flex {
@@ -73,4 +75,6 @@ div.my-chat-message {
   width: 95%;
 }
 
-.login-error {}
+.chat-message-image {
+  width: 100%;
+}
