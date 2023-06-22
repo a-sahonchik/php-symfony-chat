@@ -44,9 +44,9 @@
                     {% if chatMessage.author and not chatMessage.author.isBlocked %}
                         <div class="chat-author-username">{{ chatMessage.author.username }}</div>
                     {% elseif chatMessage.author and chatMessage.author.isBlocked %}
-                        <div class="chat-author-username">{{ chatMessage.author.username }} [BLOCKED]</div>
+                        <div class="chat-author-username blocked-user">{{ chatMessage.author.username }} [BLOCKED]</div>
                     {% else %}
-                        <div class="chat-author-username">[DELETED USER]</div>
+                        <div class="chat-author-username deleted-user">[DELETED USER]</div>
                     {% endif %}
 
                     {% if chatMessage.imageFileName %}

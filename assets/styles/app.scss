@@ -66,6 +66,14 @@ div.my-chat-message {
   padding-bottom: 0.5em;
 }
 
+.chat-author-username.blocked-user {
+  color: #e47575;
+}
+
+.chat-author-username.deleted-user {
+  color: #e47575;
+}
+
 .chat-block {
   padding: 0.5rem;
   border-radius: 15px;
@@ -77,4 +85,8 @@ div.my-chat-message {
 
 .chat-message-image {
   width: 100%;
+}
+
+.chat-message-image-container {
+  padding-bottom: 1em;
 }

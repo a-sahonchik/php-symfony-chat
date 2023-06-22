@@ -99,10 +99,17 @@ class ChatMessageController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->flush();
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                if ($chatMessage->getText() === null && $chatMessage->getImageFileName() === null) {
+                    return $this->redirectToRoute('home');
+                }
 
-            $this->addFlash('success', 'article.action.edit.success');
+                $this->entityManager->flush();
+
+                $this->addFlash('success', 'article.action.edit.success');
+
+            }
 
             return $this->redirectToRoute('home');
         }
