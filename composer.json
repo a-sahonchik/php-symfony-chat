@@ -24,6 +24,7 @@
         "symfony/http-client": "6.3.*",
         "symfony/intl": "6.3.*",
         "symfony/mailer": "6.3.*",
+        "symfony/mercure-bundle": "^0.3.7",
         "symfony/mime": "6.3.*",
         "symfony/monolog-bundle": "^3.0",
         "symfony/notifier": "6.3.*",
@@ -89,10 +90,12 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "6.3.*"
+            "require": "6.3.*",
+            "docker": true
         }
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9.5",
         "psalm/plugin-symfony": "^5.0",

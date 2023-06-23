@@ -1,0 +1,17 @@
+http://localhost
+
+route {
+    root * /srv/app/public
+    mercure {
+        transport_url {$MERCURE_TRANSPORT_URL:bolt:///data/mercure.db}
+        publisher_jwt !ChangeThisMercureHubJWTSecretKey!
+        subscriber_jwt !ChangeThisMercureHubJWTSecretKey!
+        anonymous
+        subscriptions
+        {$MERCURE_EXTRA_DIRECTIVES}
+    }
+    vulcain
+    php_fastcgi unix//var/run/php/php-fpm.sock
+    encode zstd gzip
+    file_server
+}
