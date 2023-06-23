@@ -1,5 +1,14 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+    <script>
+        const eventSource = new EventSource("{{ mercure('newMessage')|escape('js') }}");
+        eventSource.onmessage = event => {
+            console.log(JSON.parse(event.data));
+        }
+    </script>
+{% endblock %}
+
 {% block body %}
     <h1>Chat</h1>
     <div id="chat-messages" class="mb-5">

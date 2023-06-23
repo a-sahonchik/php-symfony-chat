@@ -12,6 +12,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mercure\HubInterface;
+use Symfony\Component\Mercure\Update;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -21,6 +23,7 @@ class ChatMessageController extends AbstractController
         private ChatMessageRepository $chatMessageRepository,
         private EntityManagerInterface $entityManager,
         private ChatMessageFormHandler $chatMessageFormHandler,
+        private HubInterface $hub,
     ) {
     }
 
@@ -60,6 +63,17 @@ class ChatMessageController extends AbstractController
                     $this->addFlash('error', $error->getMessage());
                 }
             }
+
+            $update = new Update(
+                'chat',
+                json_encode([
+                    'text' => $chatMessage->getText(),
+                    'author' => $chatMessage->getAuthor()->getUsername(),
+                    'imageFileName' => $chatMessage->getImageFileName(),
+                ]),
+            );
+
+            $this->hub->publish($update);
 
             return $this->redirectToRoute('home');
         }
