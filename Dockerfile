@@ -38,6 +38,7 @@ RUN apk add --no-cache \
 		file \
 		gettext \
 		git \
+        npm \
 	;
 
 RUN set -eux; \
@@ -46,7 +47,6 @@ RUN set -eux; \
 		intl \
 		opcache \
 		zip \
-        git \
     ;
 
 ###> recipes ###
