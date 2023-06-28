@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ChatMessageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ChatMessageRepository::class)]
 class ChatMessage
@@ -16,6 +17,10 @@ class ChatMessage
     private ?string $id = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'Message text cannot be longer than {{ limit }} characters',
+    )]
     private ?string $text = null;
 
     #[ORM\ManyToOne()]

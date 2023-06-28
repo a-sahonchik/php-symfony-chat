@@ -22,6 +22,7 @@ class ChatMessageFormType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'Write a message...',
+                    'maxlength' => 255,
                 ],
             ])
             ->add('image', FileType::class, [

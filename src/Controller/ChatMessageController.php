@@ -58,22 +58,22 @@ class ChatMessageController extends AbstractController
                 }
 
                 $this->chatMessageRepository->save($chatMessage, true);
+
+                $update = new Update(
+                    'chat',
+                    json_encode([
+                        'text' => $chatMessage->getText(),
+                        'author' => $chatMessage->getAuthor()->getUsername(),
+                        'imageFileName' => $chatMessage->getImageFileName(),
+                    ]),
+                );
+
+                $this->hub->publish($update);
             } else {
                 foreach ($form->getErrors(true) as $error) {
                     $this->addFlash('error', $error->getMessage());
                 }
             }
-
-            $update = new Update(
-                'chat',
-                json_encode([
-                    'text' => $chatMessage->getText(),
-                    'author' => $chatMessage->getAuthor()->getUsername(),
-                    'imageFileName' => $chatMessage->getImageFileName(),
-                ]),
-            );
-
-            $this->hub->publish($update);
 
             return $this->redirectToRoute('home');
         }
