@@ -65,7 +65,7 @@
                     {% endif %}
 
                     {% if chatMessage.text %}
-                        <div name="{{ chatMessage.id }}">{{ chatMessage.text }}</div>
+                        <div class="chat-message-message" name="{{ chatMessage.id }}">{{ chatMessage.text }}</div>
                     {% endif %}
 
                     {% if is_granted('ROLE_USER') and chatMessage.author and app.user.username == chatMessage.author.username %}
