@@ -31,3 +31,16 @@ Test users are created automatically, their credentials are (`username`:`passwor
 - `admin`:`admin`
 
 Admin user can access admin panel at http://localhost/admin/ or by clicking `Admin panel` menu item (visible only for authorized admins).
+
+## useful console commands
+
+It's possible to create users via console commands (inside `php` container).
+
+
+```bash
+bin/console app:create:<role> <username> <password>
+```
+
+Possible `<role>` is one of: `user`, `moderator`, `admin`.
+
+For example, command `bin/console app:create:moderator xxx yyy` will create user with role `moderator` and `xxx`:`yyy` credentials.
