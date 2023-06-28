@@ -61,6 +61,9 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		fi
 
 		bin/console doctrine:fixtures:load --no-interaction
+
+		npm install
+		npm run build
 	fi
 
 	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var
